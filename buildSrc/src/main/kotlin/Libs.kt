@@ -16,6 +16,12 @@ object Libs {
         const val material = "com.google.android.material:material:1.9.0"
     }
 
+    object Dagger {
+        const val daggerVersion = "2.44.2"
+        const val hiltAndroid = "com.google.dagger:hilt-android:$daggerVersion"
+        const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$daggerVersion"
+    }
+
 
     object Test {
         const val junit = "junit:junit:4.13.2"
