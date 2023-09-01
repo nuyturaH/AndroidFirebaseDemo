@@ -1,13 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.SignUpFragment">
+    tools:context=".presentation.signup.SignUpFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/tv_title_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/sign_up"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_email_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_sign_up"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_sign_up">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="text|textEmailAddress"
+            tools:text="aaa@bbb.com" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_password_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_email_sign_up"
+        app:layout_constraintStart_toStartOf="@+id/til_email_sign_up"
+        app:layout_constraintTop_toBottomOf="@+id/til_email_sign_up">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="text|textPassword"
+            tools:text="adfasdgasdg" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/sign_up"
+        app:layout_constraintEnd_toEndOf="@+id/til_password_sign_up"
+        app:layout_constraintStart_toStartOf="@+id/til_password_sign_up"
+        app:layout_constraintTop_toBottomOf="@+id/til_password_sign_up" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/btn_sign_up"
+        app:layout_constraintStart_toStartOf="@+id/btn_sign_up"
+        app:layout_constraintTop_toBottomOf="@+id/btn_sign_up">
+
+        <TextView
+            android:id="@+id/tv_have_an_account_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/have_an_account" />
+
+        <TextView
+            android:id="@+id/btn_sign_in_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="@string/sign_in"
+            android:textColor="@android:color/holo_blue_light"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

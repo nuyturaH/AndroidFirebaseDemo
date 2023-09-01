@@ -1,4 +1,4 @@
-package com.harutyun.androidfirebasedemo.presentation
+package com.harutyun.androidfirebasedemo.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import com.harutyun.domain.usecases.SignUpByEmailUseCase

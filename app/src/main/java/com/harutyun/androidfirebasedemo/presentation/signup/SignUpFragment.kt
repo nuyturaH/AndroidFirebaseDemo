@@ -1,4 +1,4 @@
-package com.harutyun.androidfirebasedemo.presentation
+package com.harutyun.androidfirebasedemo.presentation.signup
 
 import android.os.Bundle
 import android.view.LayoutInflater

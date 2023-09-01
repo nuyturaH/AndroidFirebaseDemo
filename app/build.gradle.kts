@@ -42,18 +42,27 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    // UI
     implementation(Libs.AndroidX.coreKtx)
+
+    // UI
     implementation(Libs.AndroidX.appCompat)
     implementation(Libs.AndroidX.constraintlayout)
     implementation(Libs.Material.material)
 
     // DI
     implementation(Libs.Dagger.hiltAndroid)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     kapt(Libs.Dagger.hiltAndroidCompiler)
+
+    // Navigation
+    implementation(Libs.AndroidX.Navigation.navigationUiKtx)
+    implementation(Libs.AndroidX.Navigation.navigationFragmentKtx)
+
+    // Lifecycle
+    implementation(Libs.AndroidX.Lifecycle.lifecycleLivedataKtx)
+    implementation(Libs.AndroidX.Lifecycle.lifecycleViewModelKtx)
+
+    // Legacy
+    implementation(Libs.AndroidX.Legacy.legacySupportV4)
 
     // Test
     testImplementation(Libs.Test.junit)
