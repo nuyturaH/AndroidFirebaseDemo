@@ -37,6 +37,13 @@ object Libs {
         const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$daggerVersion"
     }
 
+    object Firebase {
+        const val firebaseBom = "com.google.firebase:firebase-bom:32.2.3"
+        const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+        const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
+
+    }
+
 
     object Test {
         const val junit = "junit:junit:4.13.2"

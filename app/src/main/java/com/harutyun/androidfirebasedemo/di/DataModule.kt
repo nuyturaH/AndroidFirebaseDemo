@@ -1,5 +1,11 @@
 package com.harutyun.androidfirebasedemo.di
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.harutyun.data.mappers.UserMapper
+import com.harutyun.data.remote.UserFirebaseDataSource
+import com.harutyun.data.remote.UserRemoteDataSource
 import com.harutyun.data.repositories.UserRepositoryImpl
 import com.harutyun.domain.repositories.UserRepository
 import dagger.Module
@@ -14,8 +20,26 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(): UserRepository {
-        return UserRepositoryImpl()
+    fun provideUserRepository(remoteDataSource: UserRemoteDataSource, userMapper: UserMapper): UserRepository {
+        return UserRepositoryImpl(remoteDataSource, userMapper)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserFirebaseDataSource(auth: FirebaseAuth): UserRemoteDataSource {
+        return UserFirebaseDataSource(auth)
+    }
+
+    @Singleton
+    @Provides
+    fun providePizzaMapper(): UserMapper {
+        return UserMapper()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFireAuthentication(): FirebaseAuth {
+        return Firebase.auth
     }
 
 

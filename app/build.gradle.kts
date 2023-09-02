@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
     kotlin("kapt")
 }
 
@@ -35,6 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -63,6 +67,11 @@ dependencies {
 
     // Legacy
     implementation(Libs.AndroidX.Legacy.legacySupportV4)
+
+    // Firebase
+    implementation(platform(Libs.Firebase.firebaseBom))
+    implementation(Libs.Firebase.firebaseAnalytics)
+    implementation(Libs.Firebase.firebaseAuth)
 
     // Test
     testImplementation(Libs.Test.junit)

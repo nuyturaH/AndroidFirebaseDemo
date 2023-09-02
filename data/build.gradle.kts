@@ -38,6 +38,11 @@ dependencies {
 
     implementation(Libs.AndroidX.coreKtx)
 
+    // Firebase
+    implementation(platform(Libs.Firebase.firebaseBom))
+    implementation(Libs.Firebase.firebaseAnalytics)
+    implementation(Libs.Firebase.firebaseAuth)
+
     androidTestImplementation(Libs.AndroidX.Test.junit)
     testImplementation(Libs.Test.junit)
 }
