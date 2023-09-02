@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
-
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
 
