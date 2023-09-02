@@ -43,6 +43,7 @@ dependencies {
     implementation(Libs.Firebase.firebaseAnalytics)
     implementation(Libs.Firebase.firebaseAuth)
 
+    // Test
     androidTestImplementation(Libs.AndroidX.Test.junit)
     testImplementation(Libs.Test.junit)
 }
