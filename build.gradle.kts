@@ -7,3 +7,10 @@ plugins {
     id("com.google.dagger.hilt.android") version Libs.Dagger.daggerVersion apply false
     id("com.google.gms.google-services") version "4.3.15" apply false
 }
+
+
+buildscript {
+    dependencies {
+        classpath(Libs.AndroidX.Navigation.navigationSafeArgsGradlePlugin)
+    }
+}

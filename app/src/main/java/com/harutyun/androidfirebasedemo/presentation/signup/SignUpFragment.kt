@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentSignUpBinding
+import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -24,7 +26,8 @@ class SignUpFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,6 +38,8 @@ class SignUpFragment : Fragment() {
         addListeners()
 
         observeState()
+
+        observeNavigation()
     }
 
     private fun observeState() {
@@ -58,10 +63,28 @@ class SignUpFragment : Fragment() {
         }
     }
 
+    private fun observeNavigation() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signUpViewModel.navigation.collect { navigationCommand ->
+                    handleNavigation(navigationCommand)
+                }
+            }
+        }
+    }
+
+    private fun handleNavigation(navCommand: NavigationCommand) {
+        when (navCommand) {
+            is NavigationCommand.ToDirection -> findNavController().navigate(navCommand.directions)
+            is NavigationCommand.Back -> findNavController().navigateUp()
+            is NavigationCommand.None -> {}
+        }
+    }
+
 
     private fun addListeners() {
 
-        binding.btnSignUp.setOnClickListener{
+        binding.btnSignUp.setOnClickListener {
 
             signUpViewModel.signUpUser(
                 binding.etEmailSignUp.text.toString(),
@@ -78,6 +101,5 @@ class SignUpFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
 }

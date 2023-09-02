@@ -15,6 +15,7 @@ object Libs {
             private const val navigationVersion = "2.7.1"
             const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigationVersion"
             const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+            const val navigationSafeArgsGradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         }
 
         object Legacy {
@@ -32,7 +33,7 @@ object Libs {
     }
 
     object Dagger {
-        const val daggerVersion = "2.44.2"
+        const val daggerVersion = "2.48"
         const val hiltAndroid = "com.google.dagger:hilt-android:$daggerVersion"
         const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$daggerVersion"
     }
