@@ -8,4 +8,6 @@
     <string name="list">List</string>
     <string name="welcome_message">Hi there! Nice to see you.</string>
     <string name="welcome">Welcome</string>
+    <string name="profile">Profile</string>
+    <string name="back">Back</string>
 </resources>
