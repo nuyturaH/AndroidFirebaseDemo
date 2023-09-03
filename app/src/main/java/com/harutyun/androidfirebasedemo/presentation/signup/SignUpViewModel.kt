@@ -1,10 +1,11 @@
 package com.harutyun.androidfirebasedemo.presentation.signup
 
-import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.helpers.isLongEnough
+import com.harutyun.androidfirebasedemo.presentation.helpers.isValidEmail
 import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.UserSignUpPayload
 import com.harutyun.domain.usecases.SignUpByEmailUseCase
@@ -28,7 +29,6 @@ class SignUpViewModel @Inject constructor(
     val navigation = _navigation.asStateFlow()
 
 
-
     fun signUpUser(email: String, password: String) {
         _uiState.update { it.copy(isLoading = true) }
         if (isCredentialsValid(email, password)) {
@@ -41,8 +41,7 @@ class SignUpViewModel @Inject constructor(
                     is NetworkResponse.Failure -> _uiState.update { it.copy(emailErrorMessage = signUp.errorMessage) }
                 }
 
-                _uiState.update { it.copy(isLoading = true) }
-
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -67,11 +66,6 @@ class SignUpViewModel @Inject constructor(
 
         return uiState.value.emailErrorMessage.isEmpty() && uiState.value.passwordErrorMessage.isEmpty()
     }
-
-    private fun String.isValidEmail() =
-        !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
-
-    private fun String.isLongEnough() = length >= 6
 
     private fun navigate(navDirections: NavDirections) {
         _navigation.update { NavigationCommand.ToDirection(navDirections) }

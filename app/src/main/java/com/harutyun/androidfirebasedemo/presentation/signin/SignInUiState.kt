@@ -1,8 +1,8 @@
-package com.harutyun.androidfirebasedemo.presentation.signup
+package com.harutyun.androidfirebasedemo.presentation.signin
 
 import androidx.annotation.StringRes
 
-data class SignUpUiState(
+data class SignInUiState(
     val isLoading: Boolean = false,
     val email: String = "",
     val password: String = "",

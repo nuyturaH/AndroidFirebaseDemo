@@ -12,8 +12,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentSignInBinding
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
@@ -34,15 +36,45 @@ class SignInFragment : Fragment() {
 
         addListeners()
 
+        observeState()
+
         observeNavigation()
     }
 
     private fun addListeners() {
 
+        binding.btnSignIn.setOnClickListener {
+            signInViewModel.signInUser(
+                binding.etEmailSignIn.text.toString(),
+                binding.etPasswordSignIn.text.toString()
+            )
+        }
+
         binding.btnSignUpSignIn.setOnClickListener {
             signInViewModel.goToSignUpFragment()
         }
 
+    }
+
+    private fun observeState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                signInViewModel.uiState.collect { uiState ->
+                    handleUiState(uiState)
+                }
+            }
+        }
+    }
+
+    private fun handleUiState(uiState: SignInUiState) {
+        binding.apply {
+
+            pbSignIn.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
+            btnSignIn.visibility = if (uiState.isLoading) View.GONE else View.VISIBLE
+
+            tilEmailSignIn.error = uiState.emailErrorMessage
+            tilPasswordSignIn.error = uiState.passwordErrorMessage
+        }
     }
 
     private fun observeNavigation() {

@@ -12,4 +12,10 @@ class UserFirebaseDataSource(private val firebaseAuth: FirebaseAuth) : UserRemot
             .createUserWithEmailAndPassword(userSignUpPayload.email, userSignUpPayload.password)
             .await()
     }
+
+    override suspend fun signInUser(userSignUpPayload: UserSignUpPayload): AuthResult {
+        return firebaseAuth
+            .signInWithEmailAndPassword(userSignUpPayload.email, userSignUpPayload.password)
+            .await()
+    }
 }

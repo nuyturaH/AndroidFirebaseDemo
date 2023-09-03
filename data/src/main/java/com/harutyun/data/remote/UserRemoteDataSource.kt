@@ -7,4 +7,6 @@ interface UserRemoteDataSource {
 
     suspend fun signUpUser(userSignUpPayload: UserSignUpPayload): AuthResult
 
+    suspend fun signInUser(userSignUpPayload: UserSignUpPayload): AuthResult
+
 }

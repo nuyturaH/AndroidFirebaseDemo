@@ -11,11 +11,24 @@ import com.harutyun.domain.repositories.UserRepository
 class UserRepositoryImpl(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val userMapper: UserMapper
-): UserRepository {
+) : UserRepository {
 
     override suspend fun signUpUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User> {
         return try {
             val firebaseUser = userRemoteDataSource.signUpUser(userSignUpPayload).user
+
+            if (firebaseUser != null) {
+                NetworkResponse.Success(userMapper.mapToDomain(firebaseUser))
+            } else NetworkResponse.Failure("User is null")
+
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            NetworkResponse.Failure(e.message.toString())
+        }
+    }
+
+    override suspend fun signInUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User> {
+        return try {
+            val firebaseUser = userRemoteDataSource.signInUser(userSignUpPayload).user
 
             if (firebaseUser != null) {
                 NetworkResponse.Success(userMapper.mapToDomain(firebaseUser))

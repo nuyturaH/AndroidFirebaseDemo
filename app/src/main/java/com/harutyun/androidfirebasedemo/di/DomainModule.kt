@@ -1,6 +1,7 @@
 package com.harutyun.androidfirebasedemo.di
 
 import com.harutyun.domain.repositories.UserRepository
+import com.harutyun.domain.usecases.SignInByEmailUseCase
 import com.harutyun.domain.usecases.SignUpByEmailUseCase
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,11 @@ class DomainModule {
     @Provides
     fun provideSignUpByEmailUseCase(userRepository: UserRepository): SignUpByEmailUseCase {
         return SignUpByEmailUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideSignInByEmailUseCase(userRepository: UserRepository): SignInByEmailUseCase {
+        return SignInByEmailUseCase(userRepository)
     }
 
 }

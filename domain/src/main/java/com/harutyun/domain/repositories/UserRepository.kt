@@ -8,4 +8,6 @@ interface UserRepository {
 
     suspend fun signUpUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User>
 
+    suspend fun signInUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User>
+
 }
