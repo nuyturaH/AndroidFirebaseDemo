@@ -81,4 +81,12 @@ class SignUpViewModel @Inject constructor(
         navigate(SignUpFragmentDirections.actionSignUpFragmentToWelcomeFragment())
     }
 
+    fun goToSignInFragment() {
+        navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
+    }
+
+    fun navigationClear() {
+        _navigation.update { NavigationCommand.None }
+    }
+
 }

@@ -79,17 +79,21 @@ class SignUpFragment : Fragment() {
             is NavigationCommand.Back -> findNavController().navigateUp()
             is NavigationCommand.None -> {}
         }
+        signUpViewModel.navigationClear()
     }
 
 
     private fun addListeners() {
 
         binding.btnSignUp.setOnClickListener {
-
             signUpViewModel.signUpUser(
                 binding.etEmailSignUp.text.toString(),
                 binding.etPasswordSignUp.text.toString()
             )
+        }
+
+        binding.btnSignInSignUp.setOnClickListener {
+            signUpViewModel.goToSignInFragment()
         }
 
         binding.etEmailSignUp.doAfterTextChanged { binding.tilEmailSignUp.error = null }
