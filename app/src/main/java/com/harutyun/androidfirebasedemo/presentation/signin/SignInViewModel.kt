@@ -36,10 +36,8 @@ class SignInViewModel @Inject constructor(
 
                 val userSignUpPayload = UserSignUpPayload(email, password)
                 when (val signIn = signInByEmailUseCase(userSignUpPayload)) {
-                    is NetworkResponse.Success -> {/* go to list screen */
-                    }
-
-                    is NetworkResponse.Failure -> _uiState.update { it.copy(emailErrorMessage = signIn.errorMessage) }
+                    is NetworkResponse.Success -> goToListFragment()
+                    is NetworkResponse.Failure -> _uiState.update { it.copy(passwordErrorMessage = signIn.errorMessage) }
                 }
 
                 _uiState.update { it.copy(isLoading = false) }
@@ -75,6 +73,10 @@ class SignInViewModel @Inject constructor(
 
     fun goToSignUpFragment() {
         navigate(SignInFragmentDirections.actionSignInFragmentToSignUpFragment())
+    }
+
+    private fun goToListFragment() {
+        navigate(SignInFragmentDirections.actionSignInFragmentToListFragment())
     }
 
     fun navigationClear() {

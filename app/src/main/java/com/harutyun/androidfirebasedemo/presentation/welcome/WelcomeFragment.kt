@@ -6,7 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentWelcomeBinding
+import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import kotlinx.coroutines.launch
 
 class WelcomeFragment : Fragment() {
 
@@ -24,11 +30,32 @@ class WelcomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         addListeners()
+
+        observeNavigation()
+    }
+
+    private fun observeNavigation() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                welcomeViewModel.navigation.collect { navigationCommand ->
+                    handleNavigation(navigationCommand)
+                }
+            }
+        }
+    }
+
+    private fun handleNavigation(navCommand: NavigationCommand) {
+        when (navCommand) {
+            is NavigationCommand.ToDirection -> findNavController().navigate(navCommand.directions)
+            is NavigationCommand.Back -> findNavController().navigateUp()
+            is NavigationCommand.None -> {}
+        }
+        welcomeViewModel.navigationClear()
     }
 
     private fun addListeners() {
         binding.btnListWelcome.setOnClickListener{
-            // TODO go to list screen
+            welcomeViewModel.goToListFragment()
         }
     }
 

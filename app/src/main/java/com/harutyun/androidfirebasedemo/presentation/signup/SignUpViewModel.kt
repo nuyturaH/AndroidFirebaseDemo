@@ -38,7 +38,7 @@ class SignUpViewModel @Inject constructor(
                 val userSignUpPayload = UserSignUpPayload(email, password)
                 when (val signUp = signUpByEmailUseCase(userSignUpPayload)) {
                     is NetworkResponse.Success -> goToWelcomeFragment()
-                    is NetworkResponse.Failure -> _uiState.update { it.copy(emailErrorMessage = signUp.errorMessage) }
+                    is NetworkResponse.Failure -> _uiState.update { it.copy(passwordErrorMessage = signUp.errorMessage) }
                 }
 
                 _uiState.update { it.copy(isLoading = false) }
