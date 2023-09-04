@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.harutyun.domain.models.Item
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
+import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     private val getItemsRemoteUseCase: GetItemsRemoteUseCase,
-    private val addItemRemoteUseCase: AddItemRemoteUseCase
+    private val addItemRemoteUseCase: AddItemRemoteUseCase,
+    private val removeItemRemoteUseCase: RemoveItemRemoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ListUiState())
@@ -40,6 +42,19 @@ class ListViewModel @Inject constructor(
     fun addItemRemote(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
             addItemRemoteUseCase(item)
+
+            getItems(false)
+        }
+    }
+
+    fun removeItemRemote(position: Int) {
+        viewModelScope.launch {
+            val itemsDiffered = viewModelScope.async(Dispatchers.IO) {
+                getItemsRemoteUseCase(true)
+            }
+
+            val items = itemsDiffered.await().toMutableList()
+            removeItemRemoteUseCase(items[position])
 
             getItems(false)
         }

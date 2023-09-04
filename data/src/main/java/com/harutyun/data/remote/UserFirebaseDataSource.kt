@@ -50,10 +50,19 @@ class UserFirebaseDataSource(
             .await()
     }
 
+    override suspend fun removeItem(item: ItemEntity) {
+        val userRef = fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.uid ?: "")
+
+        userRef
+            .update(ITEMS_FIELD, FieldValue.arrayRemove(item))
+            .await()
+    }
+
 
     companion object {
         private const val USERS_COLLECTION = "users"
         private const val ITEMS_FIELD = "items"
-
     }
 }

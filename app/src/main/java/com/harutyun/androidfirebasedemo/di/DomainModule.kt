@@ -3,6 +3,7 @@ package com.harutyun.androidfirebasedemo.di
 import com.harutyun.domain.repositories.UserRepository
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
+import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
 import com.harutyun.domain.usecases.SignInByEmailUseCase
 import com.harutyun.domain.usecases.SignUpByEmailUseCase
 import dagger.Module
@@ -27,6 +28,11 @@ class DomainModule {
     @Provides
     fun provideAddItemRemoteUseCase(userRepository: UserRepository): AddItemRemoteUseCase {
         return AddItemRemoteUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideRemoveItemRemoteUseCase(userRepository: UserRepository): RemoveItemRemoteUseCase {
+        return RemoveItemRemoteUseCase(userRepository)
     }
 
     @Provides

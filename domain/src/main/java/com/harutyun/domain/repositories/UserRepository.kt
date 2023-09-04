@@ -15,4 +15,6 @@ interface UserRepository {
 
     suspend fun addItemToUserRemote(item: Item)
 
+    suspend fun removeItemFromUserRemote(item: Item)
+
 }

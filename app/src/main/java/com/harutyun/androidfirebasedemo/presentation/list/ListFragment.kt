@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.harutyun.androidfirebasedemo.R
 import com.harutyun.androidfirebasedemo.databinding.FragmentListBinding
@@ -20,6 +22,7 @@ import com.harutyun.domain.models.Item
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.UUID
+
 
 @AndroidEntryPoint
 class ListFragment : Fragment() {
@@ -91,6 +94,25 @@ class ListFragment : Fragment() {
         }
     }
 
+    private val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+        ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            val position = viewHolder.adapterPosition
+            listViewModel.removeItemRemote(position)
+        }
+    }
+
     private fun setupListRecyclerView() {
         val listAdapter = ListItemAdapter()
         binding.rvList.apply {
@@ -101,6 +123,9 @@ class ListFragment : Fragment() {
                 DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
             addItemDecoration(dividerItemDecoration)
         }
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvList)
     }
 
     override fun onDestroyView() {

@@ -57,4 +57,8 @@ class UserRepositoryImpl(
     override suspend fun addItemToUserRemote(item: Item) {
         userRemoteDataSource.addItem(itemMapper.mapToData(item))
     }
+
+    override suspend fun removeItemFromUserRemote(item: Item) {
+        userRemoteDataSource.removeItem(itemMapper.mapToData(item))
+    }
 }

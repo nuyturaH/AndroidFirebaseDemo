@@ -14,4 +14,6 @@ interface UserRemoteDataSource {
 
     suspend fun addItem(item: ItemEntity)
 
+    suspend fun removeItem(item: ItemEntity)
+
 }
