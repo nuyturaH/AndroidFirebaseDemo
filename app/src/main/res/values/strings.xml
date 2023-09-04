@@ -10,4 +10,8 @@
     <string name="welcome">Welcome</string>
     <string name="profile">Profile</string>
     <string name="back">Back</string>
+    <string name="text_adding_dialog_title">Enter the text</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="text">Text</string>
 </resources>

@@ -3,6 +3,7 @@ package com.harutyun.data.repositories
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.harutyun.data.mappers.UserMapper
 import com.harutyun.data.remote.UserRemoteDataSource
+import com.harutyun.domain.models.Item
 import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.User
 import com.harutyun.domain.models.UserSignUpPayload
@@ -37,5 +38,9 @@ class UserRepositoryImpl(
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             NetworkResponse.Failure(e.message.toString())
         }
+    }
+
+    override suspend fun addItemToUserRemote(item: Item) {
+        userRemoteDataSource.addItem(item)
     }
 }
