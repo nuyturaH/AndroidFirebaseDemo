@@ -5,6 +5,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
 import com.harutyun.data.remote.UserFirebaseDataSource
 import com.harutyun.data.remote.UserRemoteDataSource
@@ -24,9 +25,10 @@ class DataModule {
     @Provides
     fun provideUserRepository(
         remoteDataSource: UserRemoteDataSource,
-        userMapper: UserMapper
+        userMapper: UserMapper,
+        itemMapper: ItemMapper
     ): UserRepository {
-        return UserRepositoryImpl(remoteDataSource, userMapper)
+        return UserRepositoryImpl(remoteDataSource, userMapper, itemMapper)
     }
 
     @Singleton
@@ -40,8 +42,14 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun providePizzaMapper(): UserMapper {
+    fun provideUserMapper(): UserMapper {
         return UserMapper()
+    }
+
+    @Singleton
+    @Provides
+    fun provideItemMapper(): ItemMapper {
+        return ItemMapper()
     }
 
     @Singleton

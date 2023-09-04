@@ -8,6 +8,9 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.harutyun.androidfirebasedemo.R
@@ -15,6 +18,7 @@ import com.harutyun.androidfirebasedemo.databinding.FragmentListBinding
 import com.harutyun.androidfirebasedemo.presentation.helpers.DividerItemDecorator
 import com.harutyun.domain.models.Item
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 @AndroidEntryPoint
@@ -36,10 +40,32 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeState()
+
         setupListRecyclerView()
 
         addListeners()
 
+    }
+
+    private fun observeState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                listViewModel.uiState.collect { uiState ->
+                    handleUiState(uiState)
+                }
+            }
+        }
+    }
+
+    private fun handleUiState(uiState: ListUiState) {
+        binding.apply {
+
+            if (uiState.items.isNotEmpty()) {
+                (binding.rvList.adapter as ListItemAdapter).submitList(uiState.items)
+            }
+
+        }
     }
 
     private fun addListeners() {
@@ -75,17 +101,6 @@ class ListFragment : Fragment() {
                 DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
             addItemDecoration(dividerItemDecoration)
         }
-
-        // For testing
-        val list = mutableListOf(
-            Item("asdf", "Text 1"),
-            Item("arrdf", "Text 2"),
-            Item("araardf", "Text 3"),
-            Item("arr7df", "Text 4")
-        )
-        (binding.rvList.adapter as ListItemAdapter).submitList(list)
-
-
     }
 
     override fun onDestroyView() {

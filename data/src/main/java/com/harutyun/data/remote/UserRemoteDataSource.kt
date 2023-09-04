@@ -1,7 +1,7 @@
 package com.harutyun.data.remote
 
 import com.google.firebase.auth.AuthResult
-import com.harutyun.domain.models.Item
+import com.harutyun.data.entites.ItemEntity
 import com.harutyun.domain.models.UserSignUpPayload
 
 interface UserRemoteDataSource {
@@ -10,6 +10,8 @@ interface UserRemoteDataSource {
 
     suspend fun signInUser(userSignUpPayload: UserSignUpPayload): AuthResult
 
-    suspend fun addItem(item: Item)
+    suspend fun getItems(fromCache: Boolean): List<ItemEntity>
+
+    suspend fun addItem(item: ItemEntity)
 
 }

@@ -1,6 +1,7 @@
 package com.harutyun.data.repositories
 
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
 import com.harutyun.data.remote.UserRemoteDataSource
 import com.harutyun.domain.models.Item
@@ -11,8 +12,11 @@ import com.harutyun.domain.repositories.UserRepository
 
 class UserRepositoryImpl(
     private val userRemoteDataSource: UserRemoteDataSource,
-    private val userMapper: UserMapper
+    private val userMapper: UserMapper,
+    private val itemMapper: ItemMapper
 ) : UserRepository {
+
+    private var items: List<Item>? = null
 
     override suspend fun signUpUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User> {
         return try {
@@ -40,7 +44,17 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun getItemsFromRemote(fromCache: Boolean): List<Item> {
+        if (fromCache) {
+            if (items != null) {
+                return items as List<Item>
+            }
+        }
+        items = itemMapper.mapListToDomain(userRemoteDataSource.getItems(fromCache))
+        return items as List<Item>
+    }
+
     override suspend fun addItemToUserRemote(item: Item) {
-        userRemoteDataSource.addItem(item)
+        userRemoteDataSource.addItem(itemMapper.mapToData(item))
     }
 }

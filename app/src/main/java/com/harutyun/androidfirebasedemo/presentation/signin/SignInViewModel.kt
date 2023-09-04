@@ -8,6 +8,7 @@ import com.harutyun.androidfirebasedemo.presentation.helpers.isLongEnough
 import com.harutyun.androidfirebasedemo.presentation.helpers.isValidEmail
 import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.UserSignUpPayload
+import com.harutyun.domain.usecases.GetItemsRemoteUseCase
 import com.harutyun.domain.usecases.SignInByEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val signInByEmailUseCase: SignInByEmailUseCase
+    private val signInByEmailUseCase: SignInByEmailUseCase,
+    private val getItemsRemoteUseCase: GetItemsRemoteUseCase
 ) : ViewModel() {
     private val _navigation = MutableStateFlow<NavigationCommand>(NavigationCommand.None)
     val navigation = _navigation.asStateFlow()
@@ -29,14 +31,18 @@ class SignInViewModel @Inject constructor(
 
 
     fun signInUser(email: String, password: String) {
-        _uiState.update { it.copy(isLoading = true) }
         if (isCredentialsValid(email, password)) {
+            _uiState.update { it.copy(isLoading = true) }
 
             viewModelScope.launch(Dispatchers.IO) {
 
                 val userSignUpPayload = UserSignUpPayload(email, password)
                 when (val signIn = signInByEmailUseCase(userSignUpPayload)) {
-                    is NetworkResponse.Success -> goToListFragment()
+                    is NetworkResponse.Success -> {
+                        getItemsRemoteUseCase(false)
+                        goToListFragment()
+                    }
+
                     is NetworkResponse.Failure -> _uiState.update { it.copy(passwordErrorMessage = signIn.errorMessage) }
                 }
 
@@ -61,7 +67,6 @@ class SignInViewModel @Inject constructor(
             _uiState.update { it.copy(passwordErrorMessage = "Password should have more than 6 symbols") }
         }
 
-        _uiState.update { it.copy(isLoading = false) }
 
         return uiState.value.emailErrorMessage.isEmpty() && uiState.value.passwordErrorMessage.isEmpty()
     }
