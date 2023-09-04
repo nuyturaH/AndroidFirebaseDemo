@@ -10,6 +10,8 @@ interface UserRemoteDataSource {
 
     suspend fun signInUser(userSignUpPayload: UserSignUpPayload): AuthResult
 
+    suspend fun initItems(count: Int)
+
     suspend fun getItems(fromCache: Boolean): List<ItemEntity>
 
     suspend fun addItem(item: ItemEntity)

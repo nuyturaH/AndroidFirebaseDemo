@@ -11,6 +11,8 @@ interface UserRepository {
 
     suspend fun signInUser(userSignUpPayload: UserSignUpPayload): NetworkResponse<User>
 
+    suspend fun initItemsRemote(count: Int)
+
     suspend fun getItemsFromRemote(fromCache: Boolean): List<Item>
 
     suspend fun addItemToUserRemote(item: Item)

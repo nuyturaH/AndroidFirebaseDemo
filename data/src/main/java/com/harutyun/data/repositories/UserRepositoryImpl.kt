@@ -44,6 +44,10 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun initItemsRemote(count: Int) {
+        userRemoteDataSource.initItems(count)
+    }
+
     override suspend fun getItemsFromRemote(fromCache: Boolean): List<Item> {
         if (fromCache) {
             if (items != null) {

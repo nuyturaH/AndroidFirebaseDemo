@@ -10,6 +10,7 @@ import com.harutyun.data.entites.ItemEntity
 import com.harutyun.data.entites.UserDataEntity
 import com.harutyun.domain.models.UserSignUpPayload
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class UserFirebaseDataSource(
     private val firebaseAuth: FirebaseAuth,
@@ -57,6 +58,20 @@ class UserFirebaseDataSource(
 
         userRef
             .update(ITEMS_FIELD, FieldValue.arrayRemove(item))
+            .await()
+    }
+
+    override suspend fun initItems(count: Int) {
+        val items = generateSequence(0) { it + 1 }
+            .take(count)
+            .map { ItemEntity(UUID.randomUUID().toString(), "Text ${it + 1}") }
+            .toList()
+
+
+        fireStore
+            .collection(USERS_COLLECTION)
+            .document(firebaseAuth.uid ?: "")
+            .set(UserDataEntity(items))
             .await()
     }
 

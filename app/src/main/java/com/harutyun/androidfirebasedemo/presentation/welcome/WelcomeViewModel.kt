@@ -3,7 +3,6 @@ package com.harutyun.androidfirebasedemo.presentation.welcome
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
-import com.harutyun.androidfirebasedemo.presentation.signin.SignInFragmentDirections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +19,7 @@ class WelcomeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun goToListFragment() {
-        navigate(SignInFragmentDirections.actionSignInFragmentToListFragment())
+        navigate(WelcomeFragmentDirections.actionWelcomeFragmentToListFragment())
     }
 
     fun navigationClear() {
