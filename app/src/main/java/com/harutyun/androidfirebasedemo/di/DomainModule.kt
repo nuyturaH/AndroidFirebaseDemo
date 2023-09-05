@@ -9,6 +9,7 @@ import com.harutyun.domain.usecases.GetUserEmailRemoteUseCase
 import com.harutyun.domain.usecases.InitItemsLocalUseCase
 import com.harutyun.domain.usecases.InitItemsRemoteUseCase
 import com.harutyun.domain.usecases.LogOutUseCase
+import com.harutyun.domain.usecases.RemoveItemLocalUseCase
 import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
 import com.harutyun.domain.usecases.SignInByEmailUseCase
 import com.harutyun.domain.usecases.SignUpByEmailUseCase
@@ -64,6 +65,11 @@ class DomainModule {
     @Provides
     fun provideAddItemLocalUseCase(userRepository: UserRepository): AddItemLocalUseCase {
         return AddItemLocalUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideRemoveItemLocalUseCase(userRepository: UserRepository): RemoveItemLocalUseCase {
+        return RemoveItemLocalUseCase(userRepository)
     }
 
     @Provides

@@ -10,6 +10,7 @@ import com.harutyun.domain.usecases.AddItemLocalUseCase
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
 import com.harutyun.domain.usecases.GetItemsLocalUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
+import com.harutyun.domain.usecases.RemoveItemLocalUseCase
 import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,7 @@ class ListViewModel @Inject constructor(
     private val addItemRemoteUseCase: AddItemRemoteUseCase,
     private val getItemsLocalUseCase: GetItemsLocalUseCase,
     private val addItemLocalUseCase: AddItemLocalUseCase,
+    private val removeItemLocalUseCase: RemoveItemLocalUseCase,
     private val removeItemRemoteUseCase: RemoveItemRemoteUseCase
 ) : ViewModel() {
 
@@ -66,11 +68,16 @@ class ListViewModel @Inject constructor(
     fun removeItemRemote(position: Int, fromLocal: Boolean) {
         viewModelScope.launch {
             val itemsDiffered = viewModelScope.async(Dispatchers.IO) {
-                getItemsRemoteUseCase(true)
-            }
+                if (fromLocal) {
+                    getItemsLocalUseCase()
+                } else {
+                    getItemsRemoteUseCase(true)
+                }            }
 
             val items = itemsDiffered.await().toMutableList()
-            removeItemRemoteUseCase(items[position])
+
+            if (fromLocal) removeItemLocalUseCase(items[position])
+            else removeItemRemoteUseCase(items[position])
 
             getItems(fromLocal = fromLocal)
         }
