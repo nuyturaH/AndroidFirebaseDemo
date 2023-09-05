@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.0" apply false
     id("com.google.dagger.hilt.android") version Libs.Dagger.daggerVersion apply false
     id("com.google.gms.google-services") version "4.3.15" apply false
+    id("com.google.devtools.ksp") version "1.9.0-1.0.11" apply false
 }
 
 

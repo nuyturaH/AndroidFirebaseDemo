@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -43,6 +44,11 @@ dependencies {
     implementation(Libs.Firebase.firebaseAnalytics)
     implementation(Libs.Firebase.firebaseAuth)
     implementation(Libs.Firebase.firebaseFirestore)
+
+    // Room
+    annotationProcessor(Libs.AndroidX.Room.roomCompiler)
+    implementation(Libs.AndroidX.Room.roomKtx)
+    ksp(Libs.AndroidX.Room.roomCompiler)
 
     // Test
     androidTestImplementation(Libs.AndroidX.Test.junit)

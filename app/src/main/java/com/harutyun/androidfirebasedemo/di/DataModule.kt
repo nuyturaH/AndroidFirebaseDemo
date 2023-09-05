@@ -1,10 +1,16 @@
 package com.harutyun.androidfirebasedemo.di
 
+import android.app.Application
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.harutyun.data.local.UserLocalDataSource
+import com.harutyun.data.local.room.RoomItemLocalDataSource
+import com.harutyun.data.local.room.RoomItemsDao
+import com.harutyun.data.local.room.RoomItemsDatabase
 import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
 import com.harutyun.data.remote.UserFirebaseDataSource
@@ -14,6 +20,7 @@ import com.harutyun.domain.repositories.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -65,4 +72,26 @@ class DataModule {
     }
 
 
+    @Provides
+    @Singleton
+    fun provideRoomItemDataBase(@ApplicationContext application: Application): RoomItemsDatabase {
+        return Room.databaseBuilder(
+            application,
+            RoomItemsDatabase::class.java,
+            "RoomItemDatabase.db"
+        )
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRoomItemDao(dataBase: RoomItemsDatabase): RoomItemsDao {
+        return dataBase.roomItemsDao
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserRoomDataSource(dao: RoomItemsDao): UserLocalDataSource {
+        return RoomItemLocalDataSource(dao)
+    }
 }

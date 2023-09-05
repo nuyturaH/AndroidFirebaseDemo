@@ -18,6 +18,12 @@ object Libs {
             const val navigationSafeArgsGradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         }
 
+        object Room {
+            private const val roomVersion = "2.5.2"
+            const val roomCompiler = "androidx.room:room-compiler:$roomVersion"
+            const val roomKtx = "androidx.room:room-ktx:$roomVersion"
+        }
+
         object Legacy {
             const val legacySupportV4 = "androidx.legacy:legacy-support-v4:1.0.0"
         }

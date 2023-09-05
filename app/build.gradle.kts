@@ -4,7 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -56,11 +56,14 @@ dependencies {
 
     // DI
     implementation(Libs.Dagger.hiltAndroid)
-    kapt(Libs.Dagger.hiltAndroidCompiler)
+    ksp(Libs.Dagger.hiltAndroidCompiler)
 
     // Navigation
     implementation(Libs.AndroidX.Navigation.navigationUiKtx)
     implementation(Libs.AndroidX.Navigation.navigationFragmentKtx)
+
+    // Room
+    implementation(Libs.AndroidX.Room.roomKtx)
 
     // Lifecycle
     implementation(Libs.AndroidX.Lifecycle.lifecycleLivedataKtx)
