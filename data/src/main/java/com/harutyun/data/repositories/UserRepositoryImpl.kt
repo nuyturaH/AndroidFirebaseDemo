@@ -65,4 +65,12 @@ class UserRepositoryImpl(
     override suspend fun removeItemFromUserRemote(item: Item) {
         userRemoteDataSource.removeItem(itemMapper.mapToData(item))
     }
+
+    override suspend fun logOutUser() {
+        userRemoteDataSource.logOutUser()
+    }
+
+    override fun getUserEmail(): String {
+        return userRemoteDataSource.getUserEmail()
+    }
 }

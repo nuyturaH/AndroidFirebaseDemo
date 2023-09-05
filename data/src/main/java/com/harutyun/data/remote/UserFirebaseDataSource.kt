@@ -75,6 +75,18 @@ class UserFirebaseDataSource(
             .await()
     }
 
+    override suspend fun logOutUser() {
+        firebaseAuth.signOut()
+    }
+
+    override fun getUserEmail(): String {
+        return if (firebaseAuth.currentUser != null) {
+            firebaseAuth.currentUser?.email ?: ""
+        } else {
+            ""
+        }
+    }
+
 
     companion object {
         private const val USERS_COLLECTION = "users"

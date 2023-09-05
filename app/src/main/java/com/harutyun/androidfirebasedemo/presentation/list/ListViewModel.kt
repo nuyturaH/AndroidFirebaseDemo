@@ -2,6 +2,8 @@ package com.harutyun.androidfirebasedemo.presentation.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
+import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import com.harutyun.domain.models.Item
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
@@ -24,6 +26,9 @@ class ListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ListUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _navigation = MutableStateFlow<NavigationCommand>(NavigationCommand.None)
+    val navigation = _navigation.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -58,5 +63,21 @@ class ListViewModel @Inject constructor(
 
             getItems(false)
         }
+    }
+
+    private fun navigate(navDirections: NavDirections) {
+        _navigation.update { NavigationCommand.ToDirection(navDirections) }
+    }
+
+    fun goToProfileFragment() {
+        navigate(ListFragmentDirections.actionListFragmentToProfileFragment())
+    }
+
+    fun navigateBack() {
+        _navigation.update { NavigationCommand.Back }
+    }
+
+    fun navigationClear() {
+        _navigation.update { NavigationCommand.None }
     }
 }

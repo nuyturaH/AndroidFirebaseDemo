@@ -18,4 +18,8 @@ interface UserRemoteDataSource {
 
     suspend fun removeItem(item: ItemEntity)
 
+    suspend fun logOutUser()
+
+    fun getUserEmail(): String
+
 }

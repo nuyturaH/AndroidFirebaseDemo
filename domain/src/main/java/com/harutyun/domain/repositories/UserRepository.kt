@@ -19,4 +19,8 @@ interface UserRepository {
 
     suspend fun removeItemFromUserRemote(item: Item)
 
+    suspend fun logOutUser()
+
+    fun getUserEmail(): String
+
 }
