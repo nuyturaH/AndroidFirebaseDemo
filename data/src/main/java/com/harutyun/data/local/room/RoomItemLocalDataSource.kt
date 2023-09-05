@@ -21,4 +21,8 @@ class RoomItemLocalDataSource(private val roomItemDao: RoomItemsDao) : UserLocal
         roomItemDao.deleteItem(item)
     }
 
+    override fun removeItems() {
+        roomItemDao.deleteItems()
+    }
+
 }

@@ -6,7 +6,9 @@ import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import com.harutyun.domain.usecases.GetUserEmailRemoteUseCase
 import com.harutyun.domain.usecases.LogOutUseCase
+import com.harutyun.domain.usecases.RemoveAllItemsLocalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val logOutUseCase: LogOutUseCase,
     private val getUserEmailRemoteUseCase: GetUserEmailRemoteUseCase,
+    private val removeAllItemsLocalUseCase: RemoveAllItemsLocalUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -30,7 +33,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logOut() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            removeAllItemsLocalUseCase()
             logOutUseCase()
             goToSignInFragment()
         }

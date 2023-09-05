@@ -11,4 +11,6 @@ interface UserLocalDataSource {
     suspend fun addItems(items: List<ItemEntity>)
 
     suspend fun removeItem(item: ItemEntity)
+
+    fun removeItems()
 }

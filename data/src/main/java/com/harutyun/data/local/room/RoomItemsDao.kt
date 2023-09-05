@@ -21,4 +21,7 @@ interface RoomItemsDao {
 
     @Delete
     suspend fun deleteItem(item: ItemEntity)
+
+    @Query("DELETE FROM item_table")
+    fun deleteItems()
 }

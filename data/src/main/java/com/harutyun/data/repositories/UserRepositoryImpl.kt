@@ -95,6 +95,10 @@ class UserRepositoryImpl(
         userLocalDataSource.removeItem(itemMapper.mapToData(item))
     }
 
+    override fun removeItemsLocal() {
+        userLocalDataSource.removeItems()
+    }
+
     override suspend fun logOutUser() {
         userRemoteDataSource.logOutUser()
     }
