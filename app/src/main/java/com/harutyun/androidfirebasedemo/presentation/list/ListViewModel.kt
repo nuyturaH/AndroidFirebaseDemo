@@ -6,6 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import com.harutyun.domain.models.Item
+import com.harutyun.domain.usecases.AddItemLocalUseCase
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
 import com.harutyun.domain.usecases.GetItemsLocalUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
@@ -24,6 +25,7 @@ class ListViewModel @Inject constructor(
     private val getItemsRemoteUseCase: GetItemsRemoteUseCase,
     private val addItemRemoteUseCase: AddItemRemoteUseCase,
     private val getItemsLocalUseCase: GetItemsLocalUseCase,
+    private val addItemLocalUseCase: AddItemLocalUseCase,
     private val removeItemRemoteUseCase: RemoveItemRemoteUseCase
 ) : ViewModel() {
 
@@ -55,8 +57,8 @@ class ListViewModel @Inject constructor(
 
     fun addItemRemote(item: Item, fromLocal: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            addItemRemoteUseCase(item)
-
+            if (fromLocal) addItemLocalUseCase(item)
+            else addItemRemoteUseCase(item)
             getItems(fromLocal = fromLocal)
         }
     }

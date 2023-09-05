@@ -87,6 +87,10 @@ class UserRepositoryImpl(
         return itemMapper.mapListToDomain(userLocalDataSource.getItems())
     }
 
+    override suspend fun addItemLocal(item: Item) {
+        userLocalDataSource.addItem(itemMapper.mapToData(item))
+    }
+
     override suspend fun logOutUser() {
         userRemoteDataSource.logOutUser()
     }

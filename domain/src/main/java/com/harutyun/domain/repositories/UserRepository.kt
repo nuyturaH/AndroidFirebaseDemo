@@ -23,6 +23,8 @@ interface UserRepository {
 
     suspend fun getItemsFromLocal(): List<Item>
 
+    suspend fun addItemLocal(item: Item)
+
     suspend fun logOutUser()
 
     fun getUserEmail(): String
