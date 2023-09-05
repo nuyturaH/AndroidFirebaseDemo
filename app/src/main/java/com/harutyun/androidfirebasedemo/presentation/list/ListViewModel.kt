@@ -2,6 +2,7 @@ package com.harutyun.androidfirebasedemo.presentation.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import com.harutyun.domain.models.Item
@@ -63,6 +64,10 @@ class ListViewModel @Inject constructor(
 
             getItems(false)
         }
+    }
+
+    fun handleBackButton(navigationBackStackEntry: NavBackStackEntry?) {
+        _uiState.update { it.copy(isBackButtonVisible = navigationBackStackEntry != null) }
     }
 
     private fun navigate(navDirections: NavDirections) {

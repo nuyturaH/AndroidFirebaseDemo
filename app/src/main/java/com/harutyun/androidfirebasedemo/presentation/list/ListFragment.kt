@@ -53,6 +53,7 @@ class ListFragment : Fragment() {
 
         addListeners()
 
+        handleBackButton()
     }
 
     private fun observeState() {
@@ -69,9 +70,11 @@ class ListFragment : Fragment() {
         binding.apply {
 
             if (uiState.items.isNotEmpty()) {
-                (binding.rvList.adapter as ListItemAdapter).submitList(uiState.items)
+                (rvList.adapter as ListItemAdapter).submitList(uiState.items)
             }
 
+            binding.tvBackList.visibility =
+                if (uiState.isBackButtonVisible) View.VISIBLE else View.GONE
         }
     }
 
@@ -161,6 +164,11 @@ class ListFragment : Fragment() {
                 )
             }
             .show()
+    }
+
+
+    private fun handleBackButton() {
+        listViewModel.handleBackButton(findNavController().previousBackStackEntry)
     }
 
     override fun onDestroyView() {
