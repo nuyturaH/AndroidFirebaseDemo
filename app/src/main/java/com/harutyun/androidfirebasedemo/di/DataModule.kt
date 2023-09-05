@@ -1,6 +1,6 @@
 package com.harutyun.androidfirebasedemo.di
 
-import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -32,10 +32,11 @@ class DataModule {
     @Provides
     fun provideUserRepository(
         remoteDataSource: UserRemoteDataSource,
+        localDataSource: UserLocalDataSource,
         userMapper: UserMapper,
         itemMapper: ItemMapper
     ): UserRepository {
-        return UserRepositoryImpl(remoteDataSource, userMapper, itemMapper)
+        return UserRepositoryImpl(remoteDataSource, localDataSource, userMapper, itemMapper)
     }
 
     @Singleton
@@ -72,11 +73,11 @@ class DataModule {
     }
 
 
-    @Provides
     @Singleton
-    fun provideRoomItemDataBase(@ApplicationContext application: Application): RoomItemsDatabase {
+    @Provides
+    fun provideRoomItemDataBase(@ApplicationContext context: Context): RoomItemsDatabase {
         return Room.databaseBuilder(
-            application,
+            context,
             RoomItemsDatabase::class.java,
             "RoomItemDatabase.db"
         )

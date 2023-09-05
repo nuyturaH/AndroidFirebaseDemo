@@ -90,6 +90,10 @@ class ListFragment : Fragment() {
         binding.tvBackList.setOnClickListener {
             listViewModel.navigateBack()
         }
+
+        binding.switchList.setOnCheckedChangeListener { _, checked ->
+            listViewModel.getItems(fromLocal = !checked)
+        }
     }
 
 
@@ -108,7 +112,7 @@ class ListFragment : Fragment() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
             val position = viewHolder.adapterPosition
-            listViewModel.removeItemRemote(position)
+            listViewModel.removeItemRemote(position, !binding.switchList.isChecked)
         }
     }
 
@@ -160,7 +164,7 @@ class ListFragment : Fragment() {
                 dialog.dismiss()
                 val editText: EditText = customView.findViewById(R.id.et_text_dialog)
                 listViewModel.addItemRemote(
-                    Item(UUID.randomUUID().toString(), editText.text.toString())
+                    Item(UUID.randomUUID().toString(), editText.text.toString()), !binding.switchList.isChecked
                 )
             }
             .show()

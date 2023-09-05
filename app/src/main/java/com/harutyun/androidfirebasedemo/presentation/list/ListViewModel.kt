@@ -7,6 +7,7 @@ import androidx.navigation.NavDirections
 import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
 import com.harutyun.domain.models.Item
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
+import com.harutyun.domain.usecases.GetItemsLocalUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
 import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val getItemsRemoteUseCase: GetItemsRemoteUseCase,
     private val addItemRemoteUseCase: AddItemRemoteUseCase,
+    private val getItemsLocalUseCase: GetItemsLocalUseCase,
     private val removeItemRemoteUseCase: RemoveItemRemoteUseCase
 ) : ViewModel() {
 
@@ -33,27 +35,33 @@ class ListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getItems(true)
+            getItems(fromCache = true, fromLocal = false)
         }
     }
 
-    private suspend fun getItems(fromCache: Boolean) {
-        val itemsDiffered = viewModelScope.async(Dispatchers.IO) {
-            getItemsRemoteUseCase(fromCache)
+    fun getItems(fromCache: Boolean = false, fromLocal: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val itemsDiffered = viewModelScope.async {
+                if (fromLocal) {
+                    getItemsLocalUseCase()
+                } else {
+                    getItemsRemoteUseCase(fromCache)
+                }
+            }
+            _uiState.update { it.copy(items = itemsDiffered.await()) }
         }
-        _uiState.update { it.copy(items = itemsDiffered.await()) }
     }
 
 
-    fun addItemRemote(item: Item) {
+    fun addItemRemote(item: Item, fromLocal: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             addItemRemoteUseCase(item)
 
-            getItems(false)
+            getItems(fromLocal = fromLocal)
         }
     }
 
-    fun removeItemRemote(position: Int) {
+    fun removeItemRemote(position: Int, fromLocal: Boolean) {
         viewModelScope.launch {
             val itemsDiffered = viewModelScope.async(Dispatchers.IO) {
                 getItemsRemoteUseCase(true)
@@ -62,7 +70,7 @@ class ListViewModel @Inject constructor(
             val items = itemsDiffered.await().toMutableList()
             removeItemRemoteUseCase(items[position])
 
-            getItems(false)
+            getItems(fromLocal = fromLocal)
         }
     }
 

@@ -2,8 +2,10 @@ package com.harutyun.androidfirebasedemo.di
 
 import com.harutyun.domain.repositories.UserRepository
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
+import com.harutyun.domain.usecases.GetItemsLocalUseCase
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
 import com.harutyun.domain.usecases.GetUserEmailRemoteUseCase
+import com.harutyun.domain.usecases.InitItemsLocalUseCase
 import com.harutyun.domain.usecases.InitItemsRemoteUseCase
 import com.harutyun.domain.usecases.LogOutUseCase
 import com.harutyun.domain.usecases.RemoveItemRemoteUseCase
@@ -46,6 +48,16 @@ class DomainModule {
     @Provides
     fun provideInitItemsRemoteUseCase(userRepository: UserRepository): InitItemsRemoteUseCase {
         return InitItemsRemoteUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideInitItemsLocalUseCase(userRepository: UserRepository): InitItemsLocalUseCase {
+        return InitItemsLocalUseCase(userRepository)
+    }
+
+    @Provides
+    fun provideGetItemsLocalUseCase(userRepository: UserRepository): GetItemsLocalUseCase {
+        return GetItemsLocalUseCase(userRepository)
     }
 
     @Provides

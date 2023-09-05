@@ -9,6 +9,7 @@ import com.harutyun.androidfirebasedemo.presentation.helpers.isValidEmail
 import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.UserSignUpPayload
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
+import com.harutyun.domain.usecases.InitItemsLocalUseCase
 import com.harutyun.domain.usecases.SignInByEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +22,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val signInByEmailUseCase: SignInByEmailUseCase,
-    private val getItemsRemoteUseCase: GetItemsRemoteUseCase
-) : ViewModel() {
+    private val getItemsRemoteUseCase: GetItemsRemoteUseCase,
+    private val initItemsLocalUseCase: InitItemsLocalUseCase,
+    ) : ViewModel() {
     private val _navigation = MutableStateFlow<NavigationCommand>(NavigationCommand.None)
     val navigation = _navigation.asStateFlow()
 
@@ -40,6 +42,7 @@ class SignInViewModel @Inject constructor(
                 when (val signIn = signInByEmailUseCase(userSignUpPayload)) {
                     is NetworkResponse.Success -> {
                         getItemsRemoteUseCase(false)
+                        initItemsLocalUseCase(5)
                         goToListFragment()
                     }
 

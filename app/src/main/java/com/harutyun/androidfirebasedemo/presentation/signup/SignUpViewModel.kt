@@ -9,6 +9,7 @@ import com.harutyun.androidfirebasedemo.presentation.helpers.isValidEmail
 import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.UserSignUpPayload
 import com.harutyun.domain.usecases.GetItemsRemoteUseCase
+import com.harutyun.domain.usecases.InitItemsLocalUseCase
 import com.harutyun.domain.usecases.InitItemsRemoteUseCase
 import com.harutyun.domain.usecases.SignUpByEmailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +24,9 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpByEmailUseCase: SignUpByEmailUseCase,
     private val initItemsRemoteUseCase: InitItemsRemoteUseCase,
-    private val getItemsRemoteUseCase: GetItemsRemoteUseCase
-) : ViewModel() {
+    private val getItemsRemoteUseCase: GetItemsRemoteUseCase,
+    private val initItemsLocalUseCase: InitItemsLocalUseCase,
+    ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
@@ -44,6 +46,7 @@ class SignUpViewModel @Inject constructor(
                     is NetworkResponse.Success -> {
                         initItemsRemoteUseCase(5)
                         getItemsRemoteUseCase(false)
+                        initItemsLocalUseCase(5)
                         goToWelcomeFragment()
                     }
                     is NetworkResponse.Failure -> _uiState.update { it.copy(passwordErrorMessage = signUp.errorMessage) }

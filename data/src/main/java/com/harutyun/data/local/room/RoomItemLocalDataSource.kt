@@ -13,6 +13,10 @@ class RoomItemLocalDataSource(private val roomItemDao: RoomItemsDao) : UserLocal
         roomItemDao.insertItem(item)
     }
 
+    override suspend fun addItems(items: List<ItemEntity>) {
+        roomItemDao.insertItems(items)
+    }
+
     override suspend fun removeItem(item: ItemEntity) {
         roomItemDao.deleteItem(item)
     }

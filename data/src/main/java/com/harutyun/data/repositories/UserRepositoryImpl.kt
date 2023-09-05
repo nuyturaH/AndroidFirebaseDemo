@@ -1,6 +1,8 @@
 package com.harutyun.data.repositories
 
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.harutyun.data.entites.ItemEntity
+import com.harutyun.data.local.UserLocalDataSource
 import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
 import com.harutyun.data.remote.UserRemoteDataSource
@@ -9,9 +11,11 @@ import com.harutyun.domain.models.NetworkResponse
 import com.harutyun.domain.models.User
 import com.harutyun.domain.models.UserSignUpPayload
 import com.harutyun.domain.repositories.UserRepository
+import java.util.UUID
 
 class UserRepositoryImpl(
     private val userRemoteDataSource: UserRemoteDataSource,
+    private val userLocalDataSource: UserLocalDataSource,
     private val userMapper: UserMapper,
     private val itemMapper: ItemMapper
 ) : UserRepository {
@@ -45,7 +49,11 @@ class UserRepositoryImpl(
     }
 
     override suspend fun initItemsRemote(count: Int) {
-        userRemoteDataSource.initItems(count)
+        val items = generateSequence(0) { it + 1 }
+            .take(count)
+            .map { ItemEntity(UUID.randomUUID().toString(), "Text ${it + 1}") }
+            .toList()
+        userRemoteDataSource.addItems(items)
     }
 
     override suspend fun getItemsFromRemote(fromCache: Boolean): List<Item> {
@@ -64,6 +72,19 @@ class UserRepositoryImpl(
 
     override suspend fun removeItemFromUserRemote(item: Item) {
         userRemoteDataSource.removeItem(itemMapper.mapToData(item))
+    }
+
+    override suspend fun initItemsLocal(count: Int) {
+        val items = generateSequence(0) { it + 1 }
+            .take(count)
+            .map { ItemEntity(UUID.randomUUID().toString(), "Text ${it + 5}") }
+            .toList()
+        userLocalDataSource.addItems(items)
+    }
+
+    override suspend fun getItemsFromLocal(): List<Item> {
+
+        return itemMapper.mapListToDomain(userLocalDataSource.getItems())
     }
 
     override suspend fun logOutUser() {
