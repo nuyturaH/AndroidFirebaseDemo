@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentWelcomeBinding
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import kotlinx.coroutines.launch
 
 class WelcomeFragment : Fragment() {

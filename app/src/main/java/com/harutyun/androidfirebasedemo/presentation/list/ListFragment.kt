@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,12 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.harutyun.androidfirebasedemo.R
 import com.harutyun.androidfirebasedemo.databinding.FragmentListBinding
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import com.harutyun.androidfirebasedemo.presentation.helpers.DividerItemDecorator
-import com.harutyun.domain.models.Item
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 
 @AndroidEntryPoint
@@ -71,10 +70,23 @@ class ListFragment : Fragment() {
 
             if (uiState.items.isNotEmpty()) {
                 (rvList.adapter as ListItemAdapter).submitList(uiState.items)
+                tvNoDataList.visibility = View.GONE
+                rvList.visibility = View.VISIBLE
+            } else {
+                tvNoDataList.visibility = View.VISIBLE
+                rvList.visibility = View.GONE
             }
 
             binding.tvBackList.visibility =
                 if (uiState.isBackButtonVisible) View.VISIBLE else View.GONE
+
+            if (uiState.toastMessage != 0) {
+                Toast.makeText(context, getString(uiState.toastMessage), Toast.LENGTH_LONG).show()
+                listViewModel.toastMessageIsShown()
+            }
+
+            if (uiState.restoredItemPosition != null)
+            (binding.rvList.adapter as ListItemAdapter).notifyItemChanged(uiState.restoredItemPosition)
         }
     }
 
@@ -161,11 +173,13 @@ class ListFragment : Fragment() {
                 dialog.dismiss()
             }
             .setPositiveButton(resources.getString(R.string.add)) { dialog, _ ->
-                dialog.dismiss()
                 val editText: EditText = customView.findViewById(R.id.et_text_dialog)
-                listViewModel.addItemRemote(
-                    Item(UUID.randomUUID().toString(), editText.text.toString()), !binding.switchList.isChecked
-                )
+                val text = editText.text.toString()
+                if (text.isNotEmpty()) {
+                    listViewModel.addItemRemote(text, !binding.switchList.isChecked)
+                } else {
+                    Toast.makeText(context, getString(R.string.text_is_empty), Toast.LENGTH_LONG).show()
+                }
             }
             .show()
     }

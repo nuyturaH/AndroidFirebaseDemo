@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDirections
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.google.firebase.FirebaseNetworkException
+import com.harutyun.androidfirebasedemo.R
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.helpers.format
 import com.harutyun.domain.models.Item
 import com.harutyun.domain.usecases.AddItemLocalUseCase
 import com.harutyun.domain.usecases.AddItemRemoteUseCase
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,34 +61,54 @@ class ListViewModel @Inject constructor(
     }
 
 
-    fun addItemRemote(item: Item, fromLocal: Boolean) {
+    fun addItemRemote(text: String, fromLocal: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (fromLocal) addItemLocalUseCase(item)
-            else addItemRemoteUseCase(item)
-            getItems(fromLocal = fromLocal)
+            try {
+                val item = Item(UUID.randomUUID().toString(), text.format())
+
+                if (fromLocal) addItemLocalUseCase(item)
+                else addItemRemoteUseCase(item)
+                getItems(fromLocal = fromLocal)
+            } catch (e: FirebaseNetworkException) {
+                _uiState.update { it.copy(toastMessage = R.string.no_internet_message) }
+            }
         }
+
+
     }
 
     fun removeItemRemote(position: Int, fromLocal: Boolean) {
         viewModelScope.launch {
             val itemsDiffered = viewModelScope.async(Dispatchers.IO) {
-                if (fromLocal) {
-                    getItemsLocalUseCase()
-                } else {
-                    getItemsRemoteUseCase(true)
-                }            }
+                if (fromLocal) getItemsLocalUseCase()
+                else getItemsRemoteUseCase(true)
+            }
+            try {
 
-            val items = itemsDiffered.await().toMutableList()
+                val items = itemsDiffered.await().toMutableList()
 
-            if (fromLocal) removeItemLocalUseCase(items[position])
-            else removeItemRemoteUseCase(items[position])
+                if (fromLocal) removeItemLocalUseCase(items[position])
+                else removeItemRemoteUseCase(items[position])
+            } catch (e: FirebaseNetworkException) {
+                _uiState.update {
+                    it.copy(
+                        toastMessage = R.string.no_internet_message,
+                        restoredItemPosition = position
+                    )
+                }
+            }
 
             getItems(fromLocal = fromLocal)
+
         }
     }
 
     fun handleBackButton(navigationBackStackEntry: NavBackStackEntry?) {
         _uiState.update { it.copy(isBackButtonVisible = navigationBackStackEntry != null) }
+    }
+
+    fun toastMessageIsShown() {
+        _uiState.update { it.copy(toastMessage = 0) }
     }
 
     private fun navigate(navDirections: NavDirections) {

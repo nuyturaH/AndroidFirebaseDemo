@@ -13,6 +13,7 @@ import com.harutyun.data.local.room.RoomItemsDao
 import com.harutyun.data.local.room.RoomItemsDatabase
 import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
+import com.harutyun.data.remote.NetworkHandler
 import com.harutyun.data.remote.UserFirebaseDataSource
 import com.harutyun.data.remote.UserRemoteDataSource
 import com.harutyun.data.repositories.UserRepositoryImpl
@@ -34,9 +35,10 @@ class DataModule {
         remoteDataSource: UserRemoteDataSource,
         localDataSource: UserLocalDataSource,
         userMapper: UserMapper,
-        itemMapper: ItemMapper
+        itemMapper: ItemMapper,
+        networkHandler: NetworkHandler
     ): UserRepository {
-        return UserRepositoryImpl(remoteDataSource, localDataSource, userMapper, itemMapper)
+        return UserRepositoryImpl(remoteDataSource, localDataSource, userMapper, itemMapper, networkHandler)
     }
 
     @Singleton
@@ -82,6 +84,12 @@ class DataModule {
             "RoomItemDatabase.db"
         )
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkHandler(@ApplicationContext context: Context): NetworkHandler {
+        return NetworkHandler(context)
     }
 
     @Singleton

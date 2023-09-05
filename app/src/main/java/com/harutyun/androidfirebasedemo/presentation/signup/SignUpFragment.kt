@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentSignUpBinding
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -56,10 +56,17 @@ class SignUpFragment : Fragment() {
         binding.apply {
 
             pbSignUp.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
-            btnSignUp.visibility = if (uiState.isLoading) View.GONE else View.VISIBLE
+            btnSignUp.visibility = if (uiState.isLoading) View.INVISIBLE else View.VISIBLE
 
-            tilEmailSignUp.error = uiState.emailErrorMessage
-            tilPasswordSignUp.error = uiState.passwordErrorMessage
+            if (uiState.emailErrorMessageId != 0)
+                tilEmailSignUp.error = getString(uiState.emailErrorMessageId)
+
+            if (uiState.passwordErrorMessageId != 0)
+                tilPasswordSignUp.error = getString(uiState.passwordErrorMessageId)
+
+            tvErrorSignUp.text =
+                if (uiState.errorMessageId != 0) getString(uiState.errorMessageId)
+                else uiState.errorMessage.ifEmpty { "" }
         }
     }
 

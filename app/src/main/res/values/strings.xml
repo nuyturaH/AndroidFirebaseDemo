@@ -15,4 +15,13 @@
     <string name="cancel">Cancel</string>
     <string name="text">Text</string>
     <string name="log_out">Log Out</string>
+    <string name="no_internet_message">There is no internet connection</string>
+    <string name="text_is_empty">Text is empty</string>
+    <string name="email_is_empty">Email is empty</string>
+    <string name="email_format_is_wrong">Email format is wrong</string>
+    <string name="password_is_empty">Password is empty</string>
+    <string name="password_should_have_more_than_6_symbols">Password should have more than 6 symbols</string>
+    <string name="local">Local</string>
+    <string name="remote">Remote</string>
+    <string name="no_data">No Data</string>
 </resources>

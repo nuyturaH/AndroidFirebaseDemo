@@ -1,4 +1,4 @@
-package com.harutyun.androidfirebasedemo.presentation
+package com.harutyun.androidfirebasedemo.presentation.navigation
 
 import androidx.navigation.NavDirections
 

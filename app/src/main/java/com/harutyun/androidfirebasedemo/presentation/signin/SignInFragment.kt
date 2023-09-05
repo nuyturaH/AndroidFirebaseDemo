@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harutyun.androidfirebasedemo.databinding.FragmentSignInBinding
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -54,6 +55,9 @@ class SignInFragment : Fragment() {
             signInViewModel.goToSignUpFragment()
         }
 
+
+        binding.etEmailSignIn.doAfterTextChanged { binding.tilEmailSignIn.error = null }
+        binding.etPasswordSignIn.doAfterTextChanged { binding.tilPasswordSignIn.error = null }
     }
 
     private fun observeState() {
@@ -70,10 +74,17 @@ class SignInFragment : Fragment() {
         binding.apply {
 
             pbSignIn.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
-            btnSignIn.visibility = if (uiState.isLoading) View.GONE else View.VISIBLE
+            btnSignIn.visibility = if (uiState.isLoading) View.INVISIBLE else View.VISIBLE
 
-            tilEmailSignIn.error = uiState.emailErrorMessage
-            tilPasswordSignIn.error = uiState.passwordErrorMessage
+            if (uiState.emailErrorMessageId != 0)
+                tilEmailSignIn.error = getString(uiState.emailErrorMessageId)
+
+            if (uiState.passwordErrorMessageId != 0)
+                tilPasswordSignIn.error = getString(uiState.passwordErrorMessageId)
+
+            tvErrorSignIn.text =
+                if (uiState.errorMessageId != 0) getString(uiState.errorMessageId)
+                else uiState.errorMessage.ifEmpty { "" }
         }
     }
 

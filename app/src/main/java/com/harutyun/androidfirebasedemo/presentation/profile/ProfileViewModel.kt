@@ -3,7 +3,7 @@ package com.harutyun.androidfirebasedemo.presentation.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import com.harutyun.domain.usecases.GetUserEmailRemoteUseCase
 import com.harutyun.domain.usecases.LogOutUseCase
 import com.harutyun.domain.usecases.RemoveAllItemsLocalUseCase

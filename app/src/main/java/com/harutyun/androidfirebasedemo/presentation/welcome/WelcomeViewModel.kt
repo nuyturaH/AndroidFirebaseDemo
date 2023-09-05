@@ -2,7 +2,7 @@ package com.harutyun.androidfirebasedemo.presentation.welcome
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
-import com.harutyun.androidfirebasedemo.presentation.NavigationCommand
+import com.harutyun.androidfirebasedemo.presentation.navigation.NavigationCommand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

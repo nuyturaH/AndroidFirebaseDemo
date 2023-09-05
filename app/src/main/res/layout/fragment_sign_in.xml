@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="text|textEmailAddress"
+                android:maxLength="320"
                 tools:text="aaa@bbb.com" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="text|textPassword"
+                android:maxLength="320"
                 tools:text="adfasdgasdg" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,6 +106,18 @@
             app:layout_constraintEnd_toEndOf="@+id/til_password_sign_in"
             app:layout_constraintStart_toStartOf="@+id/til_password_sign_in"
             app:layout_constraintTop_toBottomOf="@+id/til_password_sign_in" />
+
+        <TextView
+            android:id="@+id/tv_error_sign_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/holo_red_light"
+            app:layout_constraintBottom_toTopOf="@+id/btn_sign_in"
+            app:layout_constraintEnd_toEndOf="@+id/til_password_sign_in"
+            app:layout_constraintStart_toStartOf="@+id/til_password_sign_in"
+            app:layout_constraintTop_toBottomOf="@+id/til_password_sign_in"
+            tools:text="Happened some error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,10 +1,13 @@
 package com.harutyun.data.repositories
 
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.harutyun.data.entites.ItemEntity
 import com.harutyun.data.local.UserLocalDataSource
 import com.harutyun.data.mappers.ItemMapper
 import com.harutyun.data.mappers.UserMapper
+import com.harutyun.data.remote.NetworkHandler
 import com.harutyun.data.remote.UserRemoteDataSource
 import com.harutyun.domain.models.Item
 import com.harutyun.domain.models.NetworkResponse
@@ -17,7 +20,8 @@ class UserRepositoryImpl(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val userLocalDataSource: UserLocalDataSource,
     private val userMapper: UserMapper,
-    private val itemMapper: ItemMapper
+    private val itemMapper: ItemMapper,
+    private val networkHandler: NetworkHandler
 ) : UserRepository {
 
     private var items: List<Item>? = null
@@ -32,6 +36,10 @@ class UserRepositoryImpl(
 
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             NetworkResponse.Failure(e.message.toString())
+        } catch (e: FirebaseAuthUserCollisionException) {
+            NetworkResponse.Failure(e.message.toString())
+        } catch (e: FirebaseNetworkException) {
+            NetworkResponse.NoInternet()
         }
     }
 
@@ -45,6 +53,8 @@ class UserRepositoryImpl(
 
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             NetworkResponse.Failure(e.message.toString())
+        } catch (e: FirebaseNetworkException) {
+            NetworkResponse.NoInternet()
         }
     }
 
@@ -67,11 +77,19 @@ class UserRepositoryImpl(
     }
 
     override suspend fun addItemToUserRemote(item: Item) {
-        userRemoteDataSource.addItem(itemMapper.mapToData(item))
+        if (networkHandler.isNetworkAvailable()) {
+            userRemoteDataSource.addItem(itemMapper.mapToData(item))
+        } else {
+            throw FirebaseNetworkException("No Internet")
+        }
     }
 
     override suspend fun removeItemFromUserRemote(item: Item) {
-        userRemoteDataSource.removeItem(itemMapper.mapToData(item))
+        if (networkHandler.isNetworkAvailable()) {
+            userRemoteDataSource.removeItem(itemMapper.mapToData(item))
+        } else {
+            throw FirebaseNetworkException("No Internet")
+        }
     }
 
     override suspend fun initItemsLocal(count: Int) {

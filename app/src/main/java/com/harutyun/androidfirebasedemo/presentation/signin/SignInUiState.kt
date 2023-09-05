@@ -6,7 +6,8 @@ data class SignInUiState(
     val isLoading: Boolean = false,
     val email: String = "",
     val password: String = "",
-    val emailErrorMessage: String = "",
-    val passwordErrorMessage: String = "",
-    @StringRes val errorMessage: Int = 0
+    @StringRes val emailErrorMessageId: Int = 0,
+    @StringRes val passwordErrorMessageId: Int = 0,
+    @StringRes val errorMessageId: Int = 0,
+    val errorMessage: String = ""
 )
